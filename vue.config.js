@@ -1,12 +1,22 @@
 const { name } = require('./package')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 
+const backEndAddr = 'http://uat.8slan.com'
+
 module.exports = {
+  publicPath: '/plutus-vendor/',
   devServer: {
     port: 10000,
     headers: {
       // 解决跨域
       'Access-Control-Allow-Origin': '*'
+    },
+    proxy: {
+      '/api': {
+        target: backEndAddr,
+        changeOrigin: true,
+        ws: true
+      }
     }
   },
   configureWebpack: {
