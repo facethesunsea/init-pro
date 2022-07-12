@@ -13,7 +13,7 @@ function render (props) {
   const { routerBase, mainAppRouter } = props
   router = new VueRouter({
     mode: 'history',
-    base: window.__POWERED_BY_QIANKUN__ ? routerBase : '/plutus-vendor', // 子路径 plutus-vendor
+    base: routerBase,
     routes
   })
   instance = new Vue({
@@ -22,8 +22,12 @@ function render (props) {
     render: h => h(App)
   }).$mount('#app') // 这里是挂载到自己的html中  基座会拿到这个挂载后的html 将其插入进去
 
+  if (router && router.history.current.name === '404') {
+    mainAppRouter.replace('/404')
+  }
+
   router.beforeEach((to, from, next) => {
-    if (to.fullPath === '/404' && mainAppRouter) {
+    if (to.name === '404' && mainAppRouter) {
       mainAppRouter.push('/404')
       return false
     }
@@ -36,7 +40,7 @@ if (window.__POWERED_BY_QIANKUN__) { // 动态添加 publicPath
 }
 
 if (!window.__POWERED_BY_QIANKUN__) { // 默认独立运行
-  render({ routerBase: '/' })
+  render({ routerBase: process.env.BASE_URL })
 }
 
 // 需要暴露接入协议

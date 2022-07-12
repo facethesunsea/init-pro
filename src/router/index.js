@@ -16,11 +16,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/404'
-  },
-  {
     path: '*',
-    redirect: '/404'
+    name: '404'
   }
 ]
 
