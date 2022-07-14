@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import routes from './router'
 import store from './store'
+import './publicPath'
 
 Vue.config.productionTip = false
 
@@ -10,7 +11,7 @@ let instance = null
 let router = null
 
 function render (props) {
-  const { routerBase, mainAppRouter } = props
+  const { container, routerBase, mainAppRouter } = props
   router = new VueRouter({
     mode: 'history',
     base: routerBase,
@@ -20,7 +21,7 @@ function render (props) {
     router,
     store,
     render: h => h(App)
-  }).$mount('#app') // 这里是挂载到自己的html中  基座会拿到这个挂载后的html 将其插入进去
+  }).$mount(container ? container.querySelector('#app') : '#app') // 这里是挂载到自己的html中  基座会拿到这个挂载后的html 将其插入进去
 
   if (router && router.history.current.name === '404') {
     mainAppRouter.replace('/404')
@@ -33,10 +34,6 @@ function render (props) {
     }
     next()
   })
-}
-
-if (window.__POWERED_BY_QIANKUN__) { // 动态添加 publicPath
-  __webpack_public_path__ = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__
 }
 
 if (!window.__POWERED_BY_QIANKUN__) { // 默认独立运行
