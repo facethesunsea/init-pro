@@ -12,10 +12,21 @@
 <style lang="less">
 #app {
   color: #2c3e50;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family:
+    'Overpass',
+    'Noto Sans SC',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Helvetica Neue',
+    Helvetica,
+    Segoe UI,
+    Arial,
+    Roboto,
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft Yahei',
+    sans-serif;
   text-align: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 #nav {

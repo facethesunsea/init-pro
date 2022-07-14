@@ -1,4 +1,4 @@
-# plutus-vendor
+# init project
 
 ## Project setup
 ```
