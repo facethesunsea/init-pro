@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vendor-test # 创建的服务名称
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vendor-test # two
+      app.kubernetes.io/name: vendor-test # three
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate: 
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: vendor-test # four
+        app.kubernetes.io/name: vendor-test # five
+    spec:
+      affinity:
+       podAntiAffinity:
+         preferredDuringSchedulingIgnoredDuringExecution:
+         - weight: 100
+           podAffinityTerm:
+             topologyKey: kubernetes.io/hostname
+      containers:
+        - name: vendor-test # six
+          image: ccr.ccs.tencentyun.com/koderover-rc/vendor-test:0.1.0 # 初始化镜像
+          imagePullPolicy: Always
+          ports:
+            - protocol: TCP
+              containerPort: 80
+          resources:
+            limits:
+              cpu: 1
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 100M
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vendor-test # seven
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vendor-test-8slan-com # eight
+  annotations:
+    kubernetes.io/ingress.class: koderover
+spec:
+  rules:
+  - host: $EnvName$-$Service$.test.8slan.com # nine  结尾test.8slan.com
+    http:
+      paths:
+      - backend:
+          serviceName: vendor-test # ten
+          servicePort: 80
+        path: /
+
