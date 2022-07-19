@@ -3,7 +3,13 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import routes from './router'
 import store from './store'
+
+import 'element-ui/lib/theme-chalk/index.css'
+import Element from 'element-ui'
+
 import './publicPath'
+
+Vue.use(Element)
 
 Vue.config.productionTip = false
 
@@ -23,7 +29,7 @@ function render (props) {
     render: h => h(App)
   }).$mount(container ? container.querySelector('#app') : '#app') // 这里是挂载到自己的html中  基座会拿到这个挂载后的html 将其插入进去
 
-  if (router && router.history.current.name === '404') {
+  if (mainAppRouter && router && router.history.current.name === '404') {
     mainAppRouter.replace('/404')
   }
 
